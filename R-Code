@@ -1,0 +1,36 @@
+```{r}
+# R-Pakete Laden
+library("igraph")
+library("igrpahdata"")
+
+getwd()
+
+
+# Daten einlesen
+
+# Edgelist 
+el <- read.csv("vfb_el2.csv", header=T, as.is=T, sep = ",")
+
+# Nodelist
+nodes <- read.csv("vfb_nl.csv", header=T, as.is=T, sep = ",")
+
+# Datensatz zusammenfÃ¼gen
+edgematrix <-as.matrix(el)
+
+
+# igraph objekt vfb erstellen
+vfb <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+
+# Zuweisen der Visualisierungskategorien fÃ¼r das two-mode Netzwerk
+# Personen wurden mit dem Wert 0 im Feld type codiert, Organisationen mit dem Wert 1
+# wenn das Codebuch anders erstellt wurde, die Werte einfach tauschen!
+V(vfb)[V(vfb)$type == 0]$shape <- "circle"
+V(vfb)[V(vfb)$type == 1]$shape <- "square"
+
+# Farben zuweisen
+V(vfb)[V(vfb)$type == 0]$color <- "red"
+V(vfb)[V(vfb)$type == 1]$color <- "grey"
+
+# Visualisierung (HdM KÃ¼rzel austauschen)
+plot(vfb, layout = layout_with_kk, edge.arrow.size=0.2, edge.curved=0.2, main = "VfB Aufsichtsrat 2019 | erstellt von lf051")
+```
